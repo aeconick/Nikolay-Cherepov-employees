@@ -27,7 +27,13 @@ function App() {
       data.forEach((row2, index2) => {
         //row[EmpID, ProjectID, DateFrom, DateTo]
         if (index1 !== index2 && row1[0] < row2[0] && row1[1] === row2[1]) {
-          console.log(row1, row2);
+          const startDate1 = moment(row1[2]);
+          const endDate1 = row1[3] === "NULL" ? moment() : moment(row1[3]);
+          console.log(row1, startDate1, endDate1);
+
+          const startDate2 = moment(row2[2]);
+          const endDate2 = row2[3] === "NULL" ? moment() : moment(row2[3]);
+          console.log(row2, startDate2, endDate2);
         }
       });
     });
