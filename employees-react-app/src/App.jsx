@@ -23,9 +23,11 @@ function App() {
 
   // Process data to find common projects and calculate days worked
   const processCommonProjects = (data) => {
+    const commonProjects = {};
+
     data.forEach((row1, index1) => {
       data.forEach((row2, index2) => {
-        //row[EmpID, ProjectID, DateFrom, DateTo]
+        //row[ 0-EmpID, 1-ProjectID, 2-DateFrom, 3-DateTo ]
         if (index1 !== index2 && row1[0] < row2[0] && row1[1] === row2[1]) {
           const startDate1 = moment(row1[2]);
           const endDate1 = row1[3] === "NULL" ? moment() : moment(row1[3]);
@@ -35,10 +37,21 @@ function App() {
 
           const overlapStart = moment.max(startDate1, startDate2);
           const overlapEnd = moment.min(endDate1, endDate2);
-          console.log(overlapStart,overlapEnd);
 
           if (overlapStart.isBefore(overlapEnd)) {
-            console.log('overlapped');
+            const daysWorked = overlapEnd.diff(overlapStart, 'days') + 1;
+
+            const key = `${row1[0]}-${row2[0]}`;
+
+            if (!commonProjects[key] || commonProjects[key].daysWorked < daysWorked) {
+              commonProjects[key] = {
+                EmpID1: row1[0],
+                EmpID2: row2[0],
+                ProjectID: row1[1],
+                daysWorked,
+              };
+
+            }
           }
         }
       });
