@@ -62,7 +62,20 @@ function App() {
       });
     });
 
-    console.log(commonProjects);
+    let maxDaysWorked = 0;
+    let mostWorkedPair = null;
+
+    for (const key in commonProjects) {
+      if (commonProjects.hasOwnProperty(key)) {
+        const project = commonProjects[key];
+        if (project.totalDaysWorked > maxDaysWorked) {
+          maxDaysWorked = project.totalDaysWorked;
+          mostWorkedPair = project;
+        }
+      }
+    }
+
+    console.log(mostWorkedPair);
 
   };
 
