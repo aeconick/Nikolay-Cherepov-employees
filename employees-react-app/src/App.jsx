@@ -4,9 +4,9 @@ import moment from "moment";
 import "./App.css";
 
 function App() {
-  const [data, setData] = useState([]);
+  const [projects, setProjects] = useState({});
+  const [finalPair, setFinalPair] = useState({});
   const [mostWorkedPair, setMostWorkedPair] = useState(null);
-  const [commonProjects, setCommonProjects] = useState([]);
 
   //parse CSV file & store it in the component state
   const handleFileUpload = (e) => {
@@ -16,7 +16,6 @@ function App() {
       skipEmptyLines: true,
       dynamicTyping: true, //TODO: maybe wont work
       complete: (results) => {
-        setData(results.data);
         processCommonProjects(results.data);
       },
     });
@@ -24,7 +23,7 @@ function App() {
 
   // Process data to find common projects and calculate days worked
   const processCommonProjects = (data) => {
-    const commonProjects = {};
+    const commonProjectsInfo = {};
 
     data.forEach((row1, index1) => {
       data.forEach((row2, index2) => {
@@ -44,8 +43,8 @@ function App() {
 
             const key = `${row1[0]}-${row2[0]}`;
 
-            if (!commonProjects[key]) {
-              commonProjects[key] = {
+            if (!commonProjectsInfo[key]) {
+              commonProjectsInfo[key] = {
                 EmpID1: row1[0],
                 EmpID2: row2[0],
                 ProjectID: row1[1],
@@ -53,8 +52,8 @@ function App() {
                 commonProjects: [{ ProjectID: row1[1], daysWorked }],
               };
             } else {
-              commonProjects[key].totalDaysWorked += daysWorked;
-              commonProjects[key].commonProjects.push({
+              commonProjectsInfo[key].totalDaysWorked += daysWorked;
+              commonProjectsInfo[key].commonProjects.push({
                 ProjectID: row1[1],
                 daysWorked,
               });
@@ -65,37 +64,54 @@ function App() {
     });
 
     let maxDaysWorked = 0;
-    let mostWorkedPair = null;
+    // let mostWorkedPair = null;
 
-    for (const key in commonProjects) {
-      if (commonProjects.hasOwnProperty(key)) {
-        const project = commonProjects[key];
+    for (const key in commonProjectsInfo) {
+      if (commonProjectsInfo.hasOwnProperty(key)) {
+        const project = commonProjectsInfo[key];
         if (project.totalDaysWorked > maxDaysWorked) {
           maxDaysWorked = project.totalDaysWorked;
-          mostWorkedPair = project;
+          //mostWorkedPair = project;
+          setMostWorkedPair(project);
         }
       }
     }
-
-    if (mostWorkedPair) {
-      setCommonProjects(mostWorkedPair.commonProjects);
-      setMostWorkedPair({
-        EmpID1: mostWorkedPair.EmpID1,
-        EmpID2: mostWorkedPair.EmpID2,
-        totalDaysWorked: mostWorkedPair.totalDaysWorked,
-      });
-    } else {
-      setCommonProjects([]);
-      setMostWorkedPair(null);
-    }
-
-    console.log(commonProjects);
   };
 
   return (
     <div className="main-container">
-      <p>select csv file:</p>
       <input type="file" accept=".csv" onChange={handleFileUpload} />
+      {mostWorkedPair && (
+        <div>
+          <h2>Most Worked Pair</h2>
+          <p>
+            Employees {mostWorkedPair.EmpID1} and {mostWorkedPair.EmpID2} have
+            worked together for {mostWorkedPair.totalDaysWorked} days.
+          </p>
+        </div>
+      )}
+      {mostWorkedPair && (
+        <table>
+          <thead>
+            <tr>
+              <th>Employee ID #1</th>
+              <th>Employee ID #2</th>
+              <th>Project ID</th>
+              <th>Days worked</th>
+            </tr>
+          </thead>
+          <tbody>
+            {mostWorkedPair.commonProjects.map((project, index) => (
+              <tr key={index}>
+                <td>{mostWorkedPair.EmpID1}</td>
+                <td>{mostWorkedPair.EmpID2}</td>
+                <td>{project.ProjectID}</td>
+                <td>{project.daysWorked}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
     </div>
   );
 }
