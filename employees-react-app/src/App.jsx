@@ -39,23 +39,46 @@ function App() {
           const overlapEnd = moment.min(endDate1, endDate2);
 
           if (overlapStart.isBefore(overlapEnd)) {
-            const daysWorked = overlapEnd.diff(overlapStart, 'days') + 1;
+            const daysWorked = overlapEnd.diff(overlapStart, "days") + 1;
 
             const key = `${row1[0]}-${row2[0]}`;
 
-            if (!commonProjects[key] || commonProjects[key].daysWorked < daysWorked) {
+            if (
+              !commonProjects[key] ||
+              commonProjects[key].daysWorked < daysWorked
+            ) {
               commonProjects[key] = {
                 EmpID1: row1[0],
                 EmpID2: row2[0],
                 ProjectID: row1[1],
                 daysWorked,
               };
-
             }
           }
         }
       });
     });
+
+    let maxDaysWorked = 0;
+    let mostWorkedPair = null;
+
+    for (const key in commonProjects) {
+      if (commonProjects.hasOwnProperty(key)) {
+        const project = commonProjects[key];
+        if (project.daysWorked > maxDaysWorked) {
+          maxDaysWorked = project.daysWorked;
+          mostWorkedPair = project;
+        }
+      }
+    }
+
+    console.log(mostWorkedPair);
+
+    if (mostWorkedPair) {
+      setResult([mostWorkedPair]);
+    } else {
+      setResult([]);
+    }
   };
 
   return (
