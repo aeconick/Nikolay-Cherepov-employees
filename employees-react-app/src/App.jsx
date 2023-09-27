@@ -29,11 +29,17 @@ function App() {
         if (index1 !== index2 && row1[0] < row2[0] && row1[1] === row2[1]) {
           const startDate1 = moment(row1[2]);
           const endDate1 = row1[3] === "NULL" ? moment() : moment(row1[3]);
-          console.log(row1, startDate1, endDate1);
 
           const startDate2 = moment(row2[2]);
           const endDate2 = row2[3] === "NULL" ? moment() : moment(row2[3]);
-          console.log(row2, startDate2, endDate2);
+
+          const overlapStart = moment.max(startDate1, startDate2);
+          const overlapEnd = moment.min(endDate1, endDate2);
+          console.log(overlapStart,overlapEnd);
+
+          if (overlapStart.isBefore(overlapEnd)) {
+            console.log('overlapped');
+          }
         }
       });
     });
