@@ -5,7 +5,6 @@ import "./App.css";
 
 function App() {
   const [data, setData] = useState([]);
-  const [result, setResult] = useState([]);
 
   //parse CSV file & store it in the component state
   const handleFileUpload = (e) => {
@@ -43,42 +42,28 @@ function App() {
 
             const key = `${row1[0]}-${row2[0]}`;
 
-            if (
-              !commonProjects[key] ||
-              commonProjects[key].daysWorked < daysWorked
-            ) {
+            if (!commonProjects[key]) {
               commonProjects[key] = {
                 EmpID1: row1[0],
                 EmpID2: row2[0],
                 ProjectID: row1[1],
-                daysWorked,
+                totalDaysWorked: daysWorked,
+                commonProjects: [{ ProjectID: row1[1], daysWorked }],
               };
+            } else {
+              commonProjects[key].totalDaysWorked += daysWorked;
+              commonProjects[key].commonProjects.push({
+                ProjectID: row1[1],
+                daysWorked,
+              });
             }
           }
         }
       });
     });
 
-    let maxDaysWorked = 0;
-    let mostWorkedPair = null;
+    console.log(commonProjects);
 
-    for (const key in commonProjects) {
-      if (commonProjects.hasOwnProperty(key)) {
-        const project = commonProjects[key];
-        if (project.daysWorked > maxDaysWorked) {
-          maxDaysWorked = project.daysWorked;
-          mostWorkedPair = project;
-        }
-      }
-    }
-
-    console.log(mostWorkedPair);
-
-    if (mostWorkedPair) {
-      setResult([mostWorkedPair]);
-    } else {
-      setResult([]);
-    }
   };
 
   return (
