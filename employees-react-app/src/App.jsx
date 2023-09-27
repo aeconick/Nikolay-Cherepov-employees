@@ -5,6 +5,8 @@ import "./App.css";
 
 function App() {
   const [data, setData] = useState([]);
+  const [mostWorkedPair, setMostWorkedPair] = useState(null);
+  const [commonProjects, setCommonProjects] = useState([]);
 
   //parse CSV file & store it in the component state
   const handleFileUpload = (e) => {
@@ -75,8 +77,19 @@ function App() {
       }
     }
 
-    console.log(mostWorkedPair);
+    if (mostWorkedPair) {
+      setCommonProjects(mostWorkedPair.commonProjects);
+      setMostWorkedPair({
+        EmpID1: mostWorkedPair.EmpID1,
+        EmpID2: mostWorkedPair.EmpID2,
+        totalDaysWorked: mostWorkedPair.totalDaysWorked,
+      });
+    } else {
+      setCommonProjects([]);
+      setMostWorkedPair(null);
+    }
 
+    console.log(commonProjects);
   };
 
   return (
