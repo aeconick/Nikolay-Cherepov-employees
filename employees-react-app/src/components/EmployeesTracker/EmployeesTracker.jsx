@@ -1,3 +1,4 @@
+/* eslint-disable no-prototype-builtins */
 import { useState } from "react";
 import Papa from "papaparse";
 import moment from "moment";
@@ -9,7 +10,7 @@ import { MostWorked } from "../MostWorked";
 export const EmployeesTracker = () => {
   const [mostWorkedPair, setMostWorkedPair] = useState(null);
 
-  //parse CSV file & pass data to processCommonProjects()
+  // Parse CSV file & pass data to processCommonProjects()
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
     Papa.parse(file, {
@@ -28,14 +29,16 @@ export const EmployeesTracker = () => {
 
     data.forEach((row1, index1) => {
       data.forEach((row2, index2) => {
-        //row[ 0-EmpID, 1-ProjectID, 2-DateFrom, 3-DateTo ]
+        // row[0-EmpID, 1-ProjectID, 2-DateFrom, 3-DateTo]
         if (index1 !== index2 && row1[0] < row2[0] && row1[1] === row2[1]) {
-          const startDate1 = moment(row1[2]);
-          const endDate1 = row1[3] === "NULL" ? moment() : moment(row1[3]);
+          // Parse dates using the parseDate function
+          const startDate1 = parseDate(row1[2]);
+          const endDate1 = row1[3] === "NULL" ? moment() : parseDate(row1[3]);
 
-          const startDate2 = moment(row2[2]);
-          const endDate2 = row2[3] === "NULL" ? moment() : moment(row2[3]);
+          const startDate2 = parseDate(row2[2]);
+          const endDate2 = row2[3] === "NULL" ? moment() : parseDate(row2[3]);
 
+          // Calculate the overlap of date ranges
           const overlapStart = moment.max(startDate1, startDate2);
           const overlapEnd = moment.min(endDate1, endDate2);
 
@@ -45,6 +48,7 @@ export const EmployeesTracker = () => {
             const key = `${row1[0]}-${row2[0]}`;
 
             if (!commonProjectsInfo[key]) {
+              // Initialize commonProjectsInfo entry
               commonProjectsInfo[key] = {
                 EmpID1: row1[0],
                 EmpID2: row2[0],
@@ -53,6 +57,7 @@ export const EmployeesTracker = () => {
                 commonProjects: [{ ProjectID: row1[1], daysWorked }],
               };
             } else {
+              // Update commonProjectsInfo entry
               commonProjectsInfo[key].totalDaysWorked += daysWorked;
               commonProjectsInfo[key].commonProjects.push({
                 ProjectID: row1[1],
@@ -75,6 +80,34 @@ export const EmployeesTracker = () => {
         }
       }
     }
+  };
+
+  // Custom date parsing function that tries multiple formats
+  const parseDate = (dateString) => {
+    const supportedFormats = [
+      "YYYY-MM-DD",
+      "MM/DD/YYYY",
+      "DD-MM-YYYY",
+      "YYYY/MM/DD",
+      "DD MMM YYYY",
+      "MMM DD, YYYY",
+      "YYYY.MM.DD",
+      "DD Month YYYY",
+      "Month DD, YYYY",
+      "YY/MM/DD",
+      "DD-MM-YY",
+      "MMM DD YY",
+      "DD/MM/YY",
+    ];
+
+    for (const format of supportedFormats) {
+      const parsedDate = moment(dateString, format, true);
+      if (parsedDate.isValid()) {
+        return parsedDate;
+      }
+    }
+    // Return null if none of the formats match
+    return null;
   };
 
   return (

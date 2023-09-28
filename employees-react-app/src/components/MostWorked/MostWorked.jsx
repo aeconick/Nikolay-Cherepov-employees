@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import "./MostWorked.css";
 
 export const MostWorked = ({ mostWorkedPair }) => {

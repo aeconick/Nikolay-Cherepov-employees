@@ -1,5 +1,7 @@
+/* eslint-disable react/prop-types */
 import "./ProjectsTable.css";
 
+// eslint-disable-next-line react/prop-types
 export const ProjectsTable = ({ mostWorkedPair }) => {
   return (
     <table className="common-projects-table">
