@@ -1,14 +1,16 @@
 import { useState } from "react";
-import "./EmployeesTracker.css";
 import Papa from "papaparse";
 import moment from "moment";
+
+import "./EmployeesTracker.css";
+import { ProjectsTable } from "../ProjectsTable";
 
 export const EmployeesTracker = () => {
   const [mostWorkedPair, setMostWorkedPair] = useState(null);
 
-  //parse CSV file & store it in the component state
+  //parse CSV file & pass data to processCommonProjects()
   const handleFileUpload = (e) => {
-    const file = e.target.files[0]; //file list objects that contails info about the selected files
+    const file = e.target.files[0];
     Papa.parse(file, {
       header: false,
       skipEmptyLines: true,
@@ -88,28 +90,7 @@ export const EmployeesTracker = () => {
           </p>
         </div>
       )}
-      {mostWorkedPair && (
-        <table className="common-projects-table">
-          <thead>
-            <tr>
-              <th>Employee ID #1</th>
-              <th>Employee ID #2</th>
-              <th>Project ID</th>
-              <th>Days worked</th>
-            </tr>
-          </thead>
-          <tbody>
-            {mostWorkedPair.commonProjects.map((project, index) => (
-              <tr key={index}>
-                <td>{mostWorkedPair.EmpID1}</td>
-                <td>{mostWorkedPair.EmpID2}</td>
-                <td>{project.ProjectID}</td>
-                <td>{project.daysWorked}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
+      {mostWorkedPair && <ProjectsTable mostWorkedPair={mostWorkedPair} />}
     </div>
   );
 };
