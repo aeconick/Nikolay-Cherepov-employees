@@ -1,0 +1,59 @@
+input[type="file"] {
+  margin-bottom: 20px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+input[type="file"]:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.most-worked-pair {
+  background-color: #f0f0f0;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.most-worked-pair h2 {
+  font-size: 24px;
+  margin: 0;
+}
+
+.most-worked-pair p {
+  font-size: 16px;
+  margin: 10px 0;
+}
+
+.common-projects-table {
+  width: 100%;
+  border-collapse: collapse;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.common-projects-table th,
+.common-projects-table td {
+  border: 1px solid #e0e0e0;
+  padding: 10px;
+  text-align: center;
+}
+
+.common-projects-table th {
+  background-color: #f0f0f0;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.common-projects-table tr:nth-child(even) {
+  background-color: #f5f5f5;
+}
+
+.common-projects-table tr:hover {
+  background-color: #d5d5d5;
+  transition: background-color 0.3s;
+}
