@@ -4,6 +4,7 @@ import moment from "moment";
 
 import "./EmployeesTracker.css";
 import { ProjectsTable } from "../ProjectsTable";
+import { MostWorked } from "../MostWorked";
 
 export const EmployeesTracker = () => {
   const [mostWorkedPair, setMostWorkedPair] = useState(null);
@@ -64,14 +65,12 @@ export const EmployeesTracker = () => {
     });
 
     let maxDaysWorked = 0;
-    // let mostWorkedPair = null;
 
     for (const key in commonProjectsInfo) {
       if (commonProjectsInfo.hasOwnProperty(key)) {
         const project = commonProjectsInfo[key];
         if (project.totalDaysWorked > maxDaysWorked) {
           maxDaysWorked = project.totalDaysWorked;
-          //mostWorkedPair = project;
           setMostWorkedPair(project);
         }
       }
@@ -81,15 +80,7 @@ export const EmployeesTracker = () => {
   return (
     <div className="employee-tracker-container">
       <input type="file" accept=".csv" onChange={handleFileUpload} />
-      {mostWorkedPair && (
-        <div className="most-worked-pair">
-          <h2>Most Worked Pair</h2>
-          <p>
-            Employees {mostWorkedPair.EmpID1} and {mostWorkedPair.EmpID2} have
-            worked together for {mostWorkedPair.totalDaysWorked} days.
-          </p>
-        </div>
-      )}
+      {mostWorkedPair && <MostWorked mostWorkedPair={mostWorkedPair} />}
       {mostWorkedPair && <ProjectsTable mostWorkedPair={mostWorkedPair} />}
     </div>
   );
