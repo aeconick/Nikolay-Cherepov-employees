@@ -4,8 +4,6 @@ import moment from "moment";
 import "./App.css";
 
 function App() {
-  const [projects, setProjects] = useState({});
-  const [finalPair, setFinalPair] = useState({});
   const [mostWorkedPair, setMostWorkedPair] = useState(null);
 
   //parse CSV file & store it in the component state
@@ -79,10 +77,10 @@ function App() {
   };
 
   return (
-    <div className="main-container">
+    <div className="employee-tracker-container">
       <input type="file" accept=".csv" onChange={handleFileUpload} />
       {mostWorkedPair && (
-        <div>
+        <div className="most-worked-pair">
           <h2>Most Worked Pair</h2>
           <p>
             Employees {mostWorkedPair.EmpID1} and {mostWorkedPair.EmpID2} have
@@ -91,7 +89,7 @@ function App() {
         </div>
       )}
       {mostWorkedPair && (
-        <table>
+        <table className="common-projects-table">
           <thead>
             <tr>
               <th>Employee ID #1</th>
