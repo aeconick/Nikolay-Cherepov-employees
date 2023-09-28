@@ -1,6 +1,6 @@
 # Nikolay-Cherepov-employees
 
-The Employee Project Tracker is a web application built with React and Vite that allows you to analyze and identify pairs of employees who have worked together on common projects for the longest period of time.
+The Employees Project Tracker is a web application built with React and Vite that allows you to analyze and identify pairs of employees who have worked together on common projects for the longest period of time.
 
 ## Features
 
@@ -22,13 +22,12 @@ The application expects a CSV file with the following format:
 - No headers in the CSV file.
 - No spaces between columns.
 - Each row should contain the following columns in order:
-  1. Employee ID
-  2. Project ID
-  3. Start Date
-  4. End Date
+  - EmpID
+  - ProjectID
+  - DateFrom
+  - DateTo
 
 Example CSV data:
-
 ```
 143,12,2013-11-01,2014-01-05
 218,10,2012-05-16,NULL
@@ -42,7 +41,7 @@ Example CSV data:
 ## Usage
 
 ```bash
-cd employee-project-tracker
+cd employees-react-app
 npm install
 npm run dev
 ```
